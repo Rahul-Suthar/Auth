@@ -12,11 +12,13 @@ body {
 }
 
 h1 {
-    margin-top: 30px;
+    margin-top: 6vh;
     font-size: 2em;
 }
 
 .parent {
+    margin: 10vh auto;
+    height: 40%;
     padding: 15%;
     display: flex;
     flex-wrap: wrap;
@@ -26,6 +28,7 @@ h1 {
 }
 
 .child {
+    height: 100px;
     min-width: 150px;
     border: 2px solid grey;
     border-radius: 20px;
@@ -55,8 +58,12 @@ h1 {
     width: 80%;
     height: 5px;
     position: absolute;
-    bottom: -15px;
-    left: 10%;
-    background-color: #5d5d67;
-    border-radius: 50%;
+    bottom: -40%;
+    left: 11%;
+    background-color: #9c9ca0;
+    border-radius: 10px;
+}
+
+.child button:hover{
+    
 }
