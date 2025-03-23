@@ -21,6 +21,16 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /home/rahul/login-web
+            
+            # Ensure the repo is clean
+            git reset --hard origin/main
             git pull origin main
-            npm install --production
+            
+            # Install dependencies (ensures proper install)
+            npm ci --production
+            
+            # Restart the application using PM2
             pm2 restart Auth
+
+            # Restart NGINX (optional, if serving static files)
+            sudo systemctl restart nginx
