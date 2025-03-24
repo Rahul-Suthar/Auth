@@ -28,9 +28,10 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            mkdir -p /home/rahul/auth-app
+            echo "MONGO_URI=${{ secrets.MONGO_URI }}" > /home/rahul/auth-app/.env
+            echo "PORT=3000" > /home/rahul/auth-app/.env
             cd /home/rahul/auth-app
             docker-compose down
             docker pull rahul38/auth-app:latest
-            echo "MONGO_URI=${{ secrets.MONGO_URI }}" > /home/rahul/auth-app/.env
-            echo "PORT=3000" > /home/rahul/auth-app/.env
             docker-compose up -d
