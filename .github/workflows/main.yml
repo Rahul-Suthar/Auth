@@ -1,4 +1,4 @@
-name: Deploy MERN App
+name: Deploy Auth App
 
 on:
   push:
@@ -6,31 +6,30 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
-    steps:    
+    steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Build and Push Docker Images
+      - name: Build and Push Docker Image
         run: |
-          docker build -t rahul38/auth-app:latest ./login-web
-          docker build -t rahul38/dashboard-app:latest ./dashboard
+          docker build -t rahul38/auth-app:latest .
           docker push rahul38/auth-app:latest
-          docker push rahul38/dashboard-app:latest
-      - name: SSH into Server & Deploy
+
+      - name: Deploy to VPS
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/rahul/
+            cd /home/rahul/auth-app
             docker-compose down
-            docker pull rahul38/auth-app:latest
-            docker pull rahul38/dashboard-app:latest
+            echo "MONGO_URI=${{ secrets.MONGO_URI }}" > /home/rahul/auth-app/.env
+            echo "PORT=${{ secrets.PORT }}" > /home/rahul/auth-app/.env
             docker-compose up -d

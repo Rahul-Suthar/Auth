@@ -1,0 +1,10 @@
+services:
+
+  auth-app:
+    image: rahul38/auth-app:latest
+    container_name: auth-app
+    restart: always
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./.env
