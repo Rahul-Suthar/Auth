@@ -1,58 +1,40 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const bcrypt = require("bcryptjs")
-const User = require("./models/User");
+const bcrypt = require("bcryptjs");
+const cors = require("cors");
 const path = require("path");
+
+// load .env variables
 require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Middlewares
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
+
+// ejs as view engine
 app.set("view engine", "ejs");
 app.set("viwes", path.join(__dirname, "views"));
-app.use(express.static(path.join(__dirname, "public")));
-app.use(bodyParser.urlencoded({ extended: true }));
 
+// db connection
 mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log("MongoDB Connected"))
 .catch((err) => console.log(err));
 
+// routes
+const authRoutes = require("./routes/auth");
+const dashboardRoutes = require("./routes/dashboard");
+
+app.use("/auth", authRoutes);
+app.use("/dashboard", dashboardRoutes);
+
+// home route
 app.get("/", (req, res) => {
   res.render("home");
-});
-
-app.get("/register", (req, res) => {
-  res.render("register", {error:null, success:null});
-});
-
-app.post("/register", async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const user = new User({ username, password });
-    await user.save();
-    res.redirect("/login");
-  } catch (error) {
-    res.render("register",{ error: `Couldn't Register user ${error}`, success:null });
-  }
-});
-
-app.get("/login", (req, res) => {
-  res.render("login", {error:null, success:null});
-});
-
-app.post("/login", async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.render("login", { error: "Invalid credentials", success:null });
-    }
-    res.render("login", {error:null, success:"login successful!" });
-  } catch (error) {
-    console.error("login errror : ", error);
-    res.status(500).send("Server error");
-  }
 });
 
 app.listen(port, () => {
