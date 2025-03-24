@@ -1,5 +1,5 @@
 #Use latest Node.js LTS version
-FROM node:20-alpine
+FROM node:20
 
 #Set working directory
 WORKDIR /app
@@ -11,8 +11,11 @@ RUN npm install --production
 #Copy the entire project
 COPY . .
 
+# set permissions
+RUN chmod -R 755 /app
+
 #Expose the port app runs on 
 EXPOSE 3000
 
 #Start the app
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
