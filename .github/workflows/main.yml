@@ -37,7 +37,7 @@ jobs:
             rm -rf $PROJECT_DIR
 
             # Clone the latest repo
-            git clone https://github.com/Rahul-Suthar/YOUR_REPO_NAME.git $PROJECT_DIR
+            git clone https://github.com/Rahul-Suthar/Auth.git $PROJECT_DIR
 
             # Move into project directory
             cd $PROJECT_DIR
