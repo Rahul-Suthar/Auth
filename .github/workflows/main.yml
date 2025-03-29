@@ -20,8 +20,8 @@ jobs:
         run: |
           docker build -t rahul38/task-backend:latest ./backend
           docker push rahul38/task-backend:latest
-          docker build -t rahul38/tast-fronted:latest ./frontend
-          docker push rahul38/tast-fronted:latest
+          docker build -t rahul38/task-fronted:latest ./frontend
+          docker push rahul38/task-fronted:latest
 
       - name: Deploy to VPS
         uses: appleboy/ssh-action@master
@@ -47,12 +47,12 @@ jobs:
 
             cd $PROJECT_DIR/backend
             docker-compose down
-            docker pull rahul38/auth-backend:latest
+            docker pull rahul38/task-backend:latest
             docker-compose up -d
 
             cd $PROJECT-DIR/frontend
             docker-compose down
-            docker pull rahul38/auth-frontend:latest
+            docker pull rahul38/task-frontend:latest
             docker-compose up -d
 
             docker image prune -af
