@@ -1,4 +1,4 @@
-name: Deploy Auth App
+name: Deploy to Azure VPS
 
 on:
   push:
@@ -18,8 +18,10 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t rahul38/auth-app:latest .
-          docker push rahul38/auth-app:latest
+          docker build -t rahul38/task-backend:latest ./backend
+          docker push rahul38/task-backend:latest
+          docker build -t rahul38/tast-fronted:latest ./frontend
+          docker push rahul38/tast-fronted:latest
 
       - name: Deploy to VPS
         uses: appleboy/ssh-action@master
@@ -28,10 +30,29 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            mkdir -p /home/rahul/auth-app
-            echo "MONGO_URI=${{ secrets.MONGO_URI }}" > /home/rahul/auth-app/.env
-            echo "PORT=3000" > /home/rahul/auth-app/.env
-            cd /home/rahul/auth-app
+            PROJECT_DIR="home/rahul/task-app"
+
+            rm -rf $PROJECT_DIR
+            git clone -b main https://github.com/rahul-suthar/Auth.git $PROJECT_DIR
+
+            cat <<EOF | tee $PROJECT_DIR/backend/.env
+            MONGO_URI=${{ secrets.MONGO_URI }}
+            PORT=3000
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            EOF
+
+            cat <<EOF | tee $PROJECT_DIR/frontend/.env
+            REACT_APP_API_URL=http://${{ secrets.SERVER_IP }}/api
+            EOF
+
+            cd $PROJECT_DIR/backend
             docker-compose down
-            docker pull rahul38/auth-app:latest
+            docker pull rahul38/auth-backend:latest
             docker-compose up -d
+
+            cd $PROJECT-DIR/frontend
+            docker-compose down
+            docker pull rahul38/auth-frontend:latest
+            docker-compose up -d
+
+            docker image prune -af

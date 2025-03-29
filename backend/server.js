@@ -14,11 +14,6 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
-
-// ejs as view engine
-app.set("view engine", "ejs");
-app.set("viwes", path.join(__dirname, "views"));
 
 // db connection
 mongoose.connect(process.env.MONGO_URI)
@@ -27,15 +22,11 @@ mongoose.connect(process.env.MONGO_URI)
 
 // routes
 const authRoutes = require("./routes/auth");
-const dashboardRoutes = require("./routes/dashboard");
+const homeRoutes = require("./routes/home");
 
-app.use("/auth", authRoutes);
-app.use("/dashboard", dashboardRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/home", homeRoutes);
 
-// home route
-app.get("/", (req, res) => {
-  res.render("home");
-});
 
 app.listen(port, () => {
   console.log(`server running on http://localhost:${port}`);
