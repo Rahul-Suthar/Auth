@@ -1,14 +1,15 @@
 services:
   backend:
-    build: .
+    container_name: backend
+    image: rahul38/task-backend:latest
     ports:
       - "3000:3000"
     networks:
       - app-network
-    env_file:
-      - ./.env
     restart: always
+    env_file:
+      - .env
 
 networks:
   app-network:
-    driver: bridge
+    external: true

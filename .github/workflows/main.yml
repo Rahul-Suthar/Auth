@@ -16,43 +16,53 @@ jobs:
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Build and Push Docker Image
+      - name: Build and Push Docker Images
         run: |
           docker build -t rahul38/task-backend:latest ./backend
           docker push rahul38/task-backend:latest
-          docker build -t rahul38/task-fronted:latest ./frontend
-          docker push rahul38/task-fronted:latest
+          docker build -t rahul38/task-frontend:latest ./frontend
+          docker push rahul38/task-frontend:latest
 
-      - name: Deploy to VPS
+      - name: Deploy to Azure VPS
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            PROJECT_DIR="home/rahul/task-app"
+            # Define project directory
+            PROJECT_DIR="/home/rahul/task-app"
 
+            # Remove old project (since VM is fresh)
             rm -rf $PROJECT_DIR
-            git clone -b main https://github.com/rahul-suthar/Auth.git $PROJECT_DIR
 
+            # Clone the latest repo
+            git clone https://github.com/Rahul-Suthar/YOUR_REPO_NAME.git $PROJECT_DIR
+
+            # Move into project directory
+            cd $PROJECT_DIR
+
+            # Ensure Docker network exists
+            docker network ls | grep app-network || docker network create app-network
+
+            # Create .env files
             cat <<EOF | tee $PROJECT_DIR/backend/.env
             MONGO_URI=${{ secrets.MONGO_URI }}
-            PORT=3000
             JWT_SECRET=${{ secrets.JWT_SECRET }}
+            PORT=3000
             EOF
 
             cat <<EOF | tee $PROJECT_DIR/frontend/.env
-            REACT_APP_API_URL=http://${{ secrets.SERVER_IP }}/api
+            VITE_API_URL=http://${{ secrets.SERVER_IP }}/api
             EOF
 
-            cd $PROJECT_DIR/backend
-            docker-compose down
+            # Pull latest Docker images
             docker pull rahul38/task-backend:latest
-            docker-compose up -d
-
-            cd $PROJECT-DIR/frontend
-            docker-compose down
             docker pull rahul38/task-frontend:latest
-            docker-compose up -d
 
+            # Start services using docker-compose
+            docker-compose -f $PROJECT_DIR/backend/docker-compose.yml up -d
+            docker-compose -f $PROJECT_DIR/frontend/docker-compose.yml up -d
+
+            # Clean up old images
             docker image prune -af

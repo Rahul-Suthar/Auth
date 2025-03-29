@@ -16,7 +16,8 @@ const Login = () => {
     setSuccess("");
 
     try {
-      const res = await axios.post("http://localhost:3000/api/auth/login", {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const res = await axios.post(`${apiUrl}/auth/login`, {
         email,
         password,
       });

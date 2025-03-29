@@ -17,23 +17,24 @@ const Login = () => {
     setSuccess("");
 
     try {
-        const res = await axios.post("http://localhost:3000/api/auth/register", {
-            username,
-            email,
-            password,
-        });
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const res = await axios.post(`${apiUrl}/auth/register`, {
+        username,
+        email,
+        password,
+      });
 
-        setSuccess(res.data.message);
-        console.log("Registration successful:", res.data);
-        setTimeout(() => navigate("/login"), 1500);
+      setSuccess(res.data.message);
+      console.log("Registration successful:", res.data);
+      setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
-        setError(err.response?.data?.error || "Something went wrong!");
+      setError(err.response?.data?.error || "Something went wrong!");
     } finally {
-        document.querySelectorAll("input").forEach((e) => {
-            setUsername("");
-            setEmail("");
-            setPassword("");
-        });
+      document.querySelectorAll("input").forEach((e) => {
+        setUsername("");
+        setEmail("");
+        setPassword("");
+      });
     }
   };
 
