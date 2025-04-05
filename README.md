@@ -1,6 +1,6 @@
 #Folder Structure
 
-`
+```
 Task
  |
  |--.github/workflows/main.yml
@@ -45,20 +45,20 @@ Task
  |    |--vite.config.js
  |
  |--backend/
- |    |
- |    |--middleware/authMiddleware.js
- |    |
- |    |--models/User.js
- |    |
- |    |--routes/
- |    |   |--auth.js
- |    |   |--home.js
- |    |
- |    |--.gitignore
- |    |--docker-compose.yml
- |    |--dockerfile
- |    |--package*.json
- |    |
- |    |--server.js
-`
+      |
+      |--middleware/authMiddleware.js
+      |
+      |--models/User.js
+      |
+      |--routes/
+      |   |--auth.js
+      |   |--home.js
+      |
+      |--.gitignore
+      |--docker-compose.yml
+      |--dockerfile
+      |--package*.json
+      |
+      |--server.js
+```
 
