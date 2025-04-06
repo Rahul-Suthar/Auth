@@ -37,8 +37,6 @@ Task
  |    |   |--index.css
  |    |
  |    |--.gitignore
- |    |--docker-compose.yml
- |    |--dockerfile
  |    |--eslint.config.js
  |    |--index.html
  |    |--package*.json
@@ -55,8 +53,6 @@ Task
       |   |--home.js
       |
       |--.gitignore
-      |--docker-compose.yml
-      |--dockerfile
       |--package*.json
       |
       |--server.js
