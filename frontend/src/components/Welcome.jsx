@@ -1,6 +1,24 @@
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
 
 const Welcome = () => {
+
+    useEffect(() => {
+        const checkApi = async () => {
+            const apiUrl = import.meta.env.VITE_API_URL;
+            try {
+                const res = await axios.get(`${apiUrl}`);
+                    console.log(res.data.message);
+            }
+            catch (error) {
+                console.error("API is not running", error);
+            }
+        }
+
+        checkApi();
+    }, [])
+
     return (
         <div className="flex flex-col items-center justify-center relative h-screen bg-[#f8f6f3] text-gray-800">
             <div className="text-3xl absolute top-30 font-bold mb-10 text-gray-700">Welcome to Task Manager</div>

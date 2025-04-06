@@ -1,8 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
 const cors = require("cors");
-const path = require("path");
 
 // load .env variables
 require("dotenv").config();
@@ -26,6 +24,14 @@ const homeRoutes = require("./routes/home");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/home", homeRoutes);
+
+app.get('/api', (req, res) => {
+  res.json({ message: "API is running" });
+});
+
+app.get('/api', (req, res) => {
+  res.json({ message: "Welcome to the application!" });
+});
 
 
 app.listen(port, () => {
