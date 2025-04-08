@@ -1,51 +1,26 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { useOutletContext } from "react-router-dom";
+import { useEffect, useRef } from "react";
 
 const Home = () => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState("");
-
-  const navigate = useNavigate();
+  const { apiResponse, setApiResponse } = useOutletContext();
+  const toastShown = useRef(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          setError("Unauthorized. Please Log in.");
-          setTimeout(() => navigate("/"), 1000);
-          return;
-        }
+    if (apiResponse?.message && !toastShown.current) {
+      toast(`${apiResponse.message}`);
+      toastShown.current = true;
+    }
 
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const res = await axios.get(`${apiUrl}/home`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        setData(res.data);
-      } catch (err) {
-        setError("Error fetching data.");
-      }
-    };
-
-    fetchData();
-
-    const tokenRemoved = () => {
-      if (!localStorage.getItem("token")) {
-        navigate("/");
-      }
-    };
-
-    window.addEventListener("storage", tokenRemoved);
-    return () => window.removeEventListener("storage", tokenRemoved);
-  }, [navigate]);
+    return () => {
+      toast.dismiss();
+    }
+  }, [apiResponse]);
 
   return (
     <main>
-    <h1 className="text-2xl font-bold">Dashboard</h1>
-    {error && <p className="text-red-500">{error}</p>}
-    {data && <p className="text-green-500">{data.message}</p>}
+      <h1 className="text-2xl font-bold">Dashboard</h1>
+      <ToastContainer />
     </main>
   );
 };
