@@ -9,8 +9,6 @@ import Profile from "./components/user/Profile"; // Import Profile
 import About from "./components/user/About";
 import Settings from "./components/user/Settings";
 
-import { Analytics } from "@vercel/analytics/react";
-
 const App = () => {
   return (
       <Routes>
@@ -29,8 +27,6 @@ const App = () => {
         </Route>
 
         <Route path="*" element={<Navigate to="/" />} />
-
-        <Analytics />
       </Routes>
   );
 };
