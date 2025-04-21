@@ -5,16 +5,16 @@ const Profile = () => {
   const { user } = useOutletContext();
   return (
     <main>
-      <h1 className="text-2xl font-bold">Profile</h1>
+      <h1 className="text-2xl font-bold text-center">Profile</h1>
       {user && (
-        <div className="flex justify-between mt-5">
+        <div className="w-110 flex justify-evenly mt-5 border-gray-400 border-2 rounded-lg p-5 bg-white shadow-lg absolute right-5 hover:scale-102 transition-all cursor-pointer">
           <FaCircleUser
             className={`w-30 h-30 text-gray-600`}
           />
 
           <div className="text-lg flex flex-col items-start justify-center">
-            <p>Username : - {user?.username}</p>
-            <p>Email : - {user?.email}</p>
+            <strong>@{user?.username}</strong>
+            <p>{user?.email}</p>
           </div>
         </div>
       )}

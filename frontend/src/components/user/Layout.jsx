@@ -7,6 +7,7 @@ import Navbar from "./Navbar";
 const Layout = () => {
   const [user, setUser] = useState(null);
   const [apiResponse, setApiResponse] = useState({ type: "", message: "" });
+  const [tasks, setTasks] = useState(null);
 
   const navigate = useNavigate();
 
@@ -15,28 +16,34 @@ const Layout = () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
-          setError("Unauthorized. Please Log in.");
+          setApiResponse({ type: "error", message: "Unauthorized. Please Log in."});
           setTimeout(() => navigate("/"), 1000);
           return;
         }
 
         const apiUrl = import.meta.env.VITE_API_URL;
-        const res = await axios.get(`${apiUrl}/home`, {
+
+        const userRes = await axios.get(`${apiUrl}/home`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        setUser(res.data.user);
+        setUser(userRes.data.user);
+
+        const taskRes = await axios.get(`${apiUrl}/tasks`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        setTasks(taskRes.data);
 
         setApiResponse({
           type: "success",
-          message: res.data.message,
+          message: "Welcome back!",
         });
-        console.log("User data fetched successfully.");
-        console.log(res.data);
+ 
       } catch (err) {
         setApiResponse({
           type: "error",
-          message: err.response?.data?.error || "Error fetching data",
+          message: err.response?.data?.error || "Failed to load dashboard",
         });
       }
     };
@@ -57,7 +64,7 @@ const Layout = () => {
     <div className="flex h-screen">
       <Navbar />
       <div className="flex-1 px-10 py-4 bg-[#f8f6f3]">
-        <Outlet context={{ user, apiResponse }} />
+        <Outlet context={{ user, tasks, setTasks, apiResponse }} />
       </div>
     </div>
   );

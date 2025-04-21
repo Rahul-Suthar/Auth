@@ -21,13 +21,15 @@ mongoose.connect(process.env.MONGO_URI)
 // routes
 const authRoutes = require("./routes/auth");
 const homeRoutes = require("./routes/home");
+const taskRoutes = require("./routes/task");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/home", homeRoutes);
+app.use("/api/tasks", taskRoutes);
 
-app.get('/api', (req, res) => {
-  res.json({ message: "API is running" });
-});
+// app.get('/api', (req, res) => {
+//   res.json({ message: "API is running" });
+// });
 
 app.get('/api', (req, res) => {
   res.json({ message: "Welcome to the application!" });
