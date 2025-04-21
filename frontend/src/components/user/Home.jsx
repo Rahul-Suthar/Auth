@@ -1,8 +1,10 @@
 import { ToastContainer, toast } from "react-toastify";
 import { useOutletContext } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { IoTrashBin } from "react-icons/io5";
-import { FiEdit3 } from "react-icons/fi";
+import { IoTrashBinOutline, IoAdd } from "react-icons/io5";
+import { FiEdit3, FiSave } from "react-icons/fi";
+import { GiCancel } from "react-icons/gi";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
 const Home = () => {
@@ -115,9 +117,12 @@ const Home = () => {
       <h1 className="text-2xl font-bold">Dashboard</h1>
       <ToastContainer className="z-10" />
 
-      <div className="border p-3 mt-5 rounded w-full">
-        <div className="flex justify-around items-center">
+      <div className="border p-2 mt-5 rounded w-full flex justify-around items-center bg-white">
+        <span className="text-lg font-semibold">Task Counts</span>
+        <div className="border p-4 rounded-lg bg-gray-100">
           <span>Completed - {counts.completed}</span>
+        </div>
+        <div className="border p-4 rounded-lg bg-gray-100">
           <span>Pending - {counts.pending}</span>
         </div>
       </div>
@@ -134,19 +139,30 @@ const Home = () => {
           type="button"
           disabled={!task.trim()}
           onClick={handleAddTask}
-          className="bg-blue-600 text-white px-4 py-2 rounded cursor-cell hover:bg-blue-700"
+          className="bg-blue-600 text-white p-2 py-1 rounded cursor-pointer hover:bg-blue-700"
         >
-          Add
+          <IoAdd className="w-7 h-7" />
         </button>
       </div>
 
-      <section className="bg-white p-4 rounded-lg shadow-md mt-8 overflow-x-auto">
-        <table className="min-w-full table-auto text-sm">
+      {/* Tasks table */}
+      <section className="bg-white rounded-lg shadow-md mt-8 overflow-x-auto">
+        <table className="w-full text-sm text-left">
           <thead className="bg-gray-100 rounded-lg text-gray-700 tracking-wider">
             <tr>
-              <th className="py-2">Status</th>
-              <th className="py-2">Task</th>
-              <th className="py-2 text-center">Actions</th>
+              <th className="p-4">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    // checked={task.status === "completed"}
+                    // onChange={() => tasks.forEach(() => {task.status = "completed"})}
+                    className="accent-green-600 cursor-pointer w-4.5 h-4.5"
+                    // disabled={editingId === task._id}
+                  />
+                </div>
+              </th>
+              <th className="p-4 w-full">Task</th>
+              <th className="pl-8">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -154,18 +170,17 @@ const Home = () => {
               [...tasks]
                 .sort((a, b) => (a.status === "pending" ? -1 : 1))
                 .map((task, index) => (
-                  <tr
-                    key={task._id || index}
-                    className="border-b hover:bg-gray-100 "
-                  >
-                    <td className="px-4 py-2">
-                      <input
-                        type="checkbox"
-                        checked={task.status === "completed"}
-                        onChange={() => handleToggle(task)}
-                        className="accent-green-600 cursor-pointer w-4.5 h-4.5 align-middle"
-                        disabled={editingId === task._id}
-                      />
+                  <tr className="border-b bg-white hover:bg-gray-100 ">
+                    <td className="w-4 p-4">
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={task.status === "completed"}
+                          onChange={() => handleToggle(task)}
+                          className="accent-green-600 w-4.5 h-4.5 cursor-pointer"
+                          disabled={editingId === task._id}
+                        />
+                      </div>
                     </td>
                     <td className="px-4 py-2">
                       {editingId === task._id ? (
@@ -188,7 +203,7 @@ const Home = () => {
                             onClick={() => handleUpdate(task._id)}
                             className="text-green-600 py-2 px-3 hover:underline cursor-pointer"
                           >
-                            Save
+                            <FiSave className="w-5 h-5" />
                           </button>
                           <button
                             onClick={() => {
@@ -197,7 +212,7 @@ const Home = () => {
                             }}
                             className="text-gray-500 hover:underline cursor-pointer"
                           >
-                            Cancel
+                            <GiCancel className="w-5 h-5" />
                           </button>
                         </>
                       ) : (
@@ -215,7 +230,7 @@ const Home = () => {
                             onClick={() => handleDelete(task._id)}
                             className="text-red-600 hover:underline cursor-pointer"
                           >
-                            <IoTrashBin className="w-5 h-5" />
+                            <IoTrashBinOutline className="w-5 h-5" />
                           </button>
                         </>
                       )}
