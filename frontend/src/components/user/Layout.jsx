@@ -7,7 +7,7 @@ import Navbar from "./Navbar";
 const Layout = () => {
   const [user, setUser] = useState(null);
   const [apiResponse, setApiResponse] = useState({ type: "", message: "" });
-  const [tasks, setTasks] = useState(null);
+  const [tasks, setTasks] = useState(""); 
 
   const navigate = useNavigate();
 
@@ -61,9 +61,9 @@ const Layout = () => {
   }, [navigate]);
 
   return (
-    <div className="flex h-screen">
+    <div className="flex flex-col h-screen ">
       <Navbar />
-      <div className="flex-1 px-10 py-4 bg-[#f8f6f3]">
+      <div className="bg-[#FDF2F2F2] h-full md:flex items-center justify-center p-8">
         <Outlet context={{ user, tasks, setTasks, apiResponse }} />
       </div>
     </div>

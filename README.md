@@ -1,4 +1,7 @@
-# 🚀 TaskWise – Manage Tasks, Build Dedication
+<h1>
+  <img src="frontend/src/assets/logo.svg" alt="TaskWise Logo" width="40" style="vertical-align:middle;"/>
+  TaskWise – Manage Tasks, Build Dedication
+</h1>
 
 **TaskWise** is a productivity web app that helps users manage their daily tasks with a gamified twist. Designed to build motivation and consistency, TaskWise rewards users for timely task completion through a unique "Dedication Level" system.
 

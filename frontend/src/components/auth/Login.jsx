@@ -24,7 +24,7 @@ const Login = () => {
 
       localStorage.setItem("token", res.data.token);
       setSuccess("Login Successful! Redirecting...");
-      console.log("Login Successful:", res.data);
+      // console.log("Login Successful:", res.data);
       setTimeout(() => navigate("/dashboard"), 1500);
     } catch (err) {
       setError(err.response?.data?.error || "Something went wrong!");
@@ -40,19 +40,16 @@ const Login = () => {
   return (
     <form
       onSubmit={Submit}
-      className="flex flex-col items-center p-10 border border-gray-600 rounded-4xl shadow-lg shadow-gray-400"
+      className="flex flex-col items-center p-5 w-[350px] h-[380px] absolute top-60 bg-[#eddadae6] rounded-[50px] shadow-[8px_13px_4px_#00000040]"
     >
-      <h1 className="text-3xl font-semibold text-gray-700 mb-6">Login</h1>
-
-      {error && <p className="text-red-500 mb-4">{error}</p>}
-      {success && <p className="text-green-500 mb-4">{success}</p>}
+      <h1 className="text-black text-3xl mb-10">Login</h1>
 
       <input
         type="email"
         name="email"
-        placeholder="Email"
+        placeholder="email"
         required
-        className="border border-gray-500  p-3 rounded-2xl mb-6 w-72"
+        className="bg-[#ffffffe6] p-2 px-5 rounded-2xl mb-8 w-65 shadow-lg"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
@@ -60,9 +57,9 @@ const Login = () => {
       <input
         type="password"
         name="password"
-        placeholder="Password"
+        placeholder="password"
         required
-        className="border border-gray-500 p-3 rounded-2xl mb-6 w-72"
+        className="bg-[#ffffffe6] p-2 px-5 rounded-2xl mb-8 w-65 shadow-lg"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
@@ -70,17 +67,20 @@ const Login = () => {
       <button
         type="submit"
         className="w-50 flex items-center justify-center gap-3 bg-green-600 font-bold text-md text-white px-6 py-2 rounded-2xl cursor-pointer
-          hover:bg-green-700 hover:w-full transition-all duration-300"
+          hover:bg-green-700 hover:w-65 transition-all duration-300"
       >
         Login <FaArrowRightToBracket />
       </button>
 
-      <p className="mt-6 text-gray-600">
-        Don't have an account?
-        <Link to="/auth/register" className="ml-2 text-blue-600 underline">
-          Register
+      <p className="mt-7 text-gray-600">
+        new user? -
+        <Link to="/register" className="ml-2 text-[#0036fb] underline">
+          register
         </Link>
       </p>
+
+      {error && <p className="text-red-500 mt-4">{error}</p>}
+      {success && <p className="text-green-500 mt-4">{success}</p>}
     </form>
   );
 };
